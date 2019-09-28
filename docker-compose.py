@@ -9,33 +9,34 @@ def get_mode():
 
 
 def compose(mode):
-    compose = {}
-    compose["version"] = "3"
-    compose["services"] = compose_services(mode)
-    return compose
+    return {
+        "version": "3",
+        "services": compose_services(mode)
+    }
 
 
 def compose_services(mode):
-    services = {}
-    services["app"] = compose_services_app(mode)
-    services["psql"] = compose_services_psql(mode)
-    return services
+    return {
+        "app": compose_services_app(mode),
+        "psql": compose_services_psql(mode)
+    }
 
 
 def compose_services_app(mode):
-    service = {}
-    service["build"] = "." if mode != "dev" else {
-        "context": ".", "dockerfile": "dev.Dockerfile"}
-    service["restart"] = "always"
-    service["environment"] = {
-        "APP_DIR": "data" if mode != "dev" else "data/app",
-        "PSQL_HOST": "psql",
-        "PSQL_PORT": 5432,
-        "PSQL_DATABASE": "postgres",
-        "PSQL_USER": "postgres",
-        "PSQL_PASS": "postgres"
+    service = {
+        "build": "." if mode != "dev" else {
+            "context": ".", "dockerfile": "dev.Dockerfile"},
+        "restart": "always",
+        "environment": {
+            "APP_DIR": "data" if mode != "dev" else "data/app",
+            "PSQL_HOST": "psql",
+            "PSQL_PORT": 5432,
+            "PSQL_DATABASE": "postgres",
+            "PSQL_USER": "postgres",
+            "PSQL_PASS": "postgres"
+        },
+        "depends_on": ["psql"],
     }
-    service["depends_on"] = ["psql"]
     if mode == "prod":
         service["volumes"] = ["./data/app:/home/app/data"]
     if mode == "dev":
@@ -45,17 +46,16 @@ def compose_services_app(mode):
 
 
 def compose_services_psql(mode):
-    service = {}
-    service["restart"] = "always"
-    service["image"] = "postgres:10.5"
-    service["environment"] = {
-        "POSTGRES_PASSWORD": "postgres"
+    return {
+        "restart": "always",
+        "image": "postgres:10.5",
+        "environment": {
+            "POSTGRES_PASSWORD": "postgres"
+        },
+        "volumes": [
+            "./data/psql:/var/lib/postgresql/data"
+        ]
     }
-    service["volumes"] = [
-        "./data/psql:/var/lib/postgresql/data"
-    ]
-
-    return service
 
 
 print(json.dumps(compose(get_mode())))
