@@ -10,7 +10,9 @@ RUN apt update &&\
 
 WORKDIR $HOME
 
-COPY project/build.properties project/plugins.sbt $HOME/project/
+COPY project/build.properties $HOME/project/
+RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sbt update"
+COPY project/plugins.sbt $HOME/project/
 COPY .scalafmt.conf build.sbt $HOME/
 RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sbt update"
 COPY src $HOME/src
