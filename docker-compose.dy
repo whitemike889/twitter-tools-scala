@@ -49,9 +49,9 @@ const compose_services_app = mode => ({
   },
   depends_on: ["psql"],
   volumes: match(mode, {
-    prod: ["./data/app:/home/app/data"],
+    prod: ["./data/app:/home/app/data", "./config:/home/app/config"],
     dev: ["./:/home/app/"],
-    test: undefined
+    test: ["./config:/home/app/config"]
   })
 });
 
