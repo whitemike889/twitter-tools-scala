@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+function get_mode() {
+  const env = process.env["DC_ENV"];
+  if (env === "prod" || env === "dev" || env === "test") {
+    return env;
+  }
+  throw new Error();
+}
+
+function match(val, map) {
+  for (let key of Object.keys(map)) {
+    if (key.split(",").includes(val)) {
+      return map[key];
+    }
+  }
+  throw new Error();
+}
+
+function compose(mode) {
+  return {
+    version: "3",
+    services: compose_services(mode)
+  };
+}
+
+function compose_services(mode) {
+  return {
+    app: compose_services_app(mode),
+    psql: compose_services_psql(mode)
+  };
+}
+
+function compose_services_app(mode) {
+  const service = {
+    build: match(mode, {
+      dev: {
+        context: ".",
+        dockerfile: "dev.Dockerfile"
+      },
+      [["prod", "test"]]: "."
+    }),
+    restart: "always",
+    environment: {
+      APP_DIR: match(mode, {
+        [["prod", "test"]]: "data",
+        dev: "data/app"
+      }),
+      PSQL_HOST: "psql",
+      PSQL_PORT: 5432,
+      PSQL_DATABASE: "postgres",
+      PSQL_USER: "postgres",
+      PSQL_PASS: "postgres"
+    },
+    depends_on: ["psql"],
+    volumes: match(mode, {
+      prod: ["./data/app:/home/app/data"],
+      dev: ["./:/home/app/"],
+      test: undefined
+    })
+  };
+
+  return service;
+}
+
+function compose_services_psql(mode) {
+  return {
+    restart: "always",
+    image: "postgres:10.5",
+    environment: {
+      POSTGRES_PASSWORD: "postgres"
+    },
+    volumes: ["./data/psql:/var/lib/postgresql/data"]
+  };
+}
+
+console.log(JSON.stringify(compose(get_mode())));
