@@ -17,61 +17,51 @@ function match(val, map) {
   throw new Error();
 }
 
-function compose(mode) {
-  return {
-    version: "3",
-    services: compose_services(mode)
-  };
-}
+const compose = mode => ({
+  version: "3",
+  services: compose_services(mode)
+});
 
-function compose_services(mode) {
-  return {
-    app: compose_services_app(mode),
-    psql: compose_services_psql(mode)
-  };
-}
+const compose_services = mode => ({
+  app: compose_services_app(mode),
+  psql: compose_services_psql(mode)
+});
 
-function compose_services_app(mode) {
-  const service = {
-    build: match(mode, {
-      dev: {
-        context: ".",
-        dockerfile: "dev.Dockerfile"
-      },
-      [["prod", "test"]]: "."
+const compose_services_app = mode => ({
+  build: match(mode, {
+    dev: {
+      context: ".",
+      dockerfile: "dev.Dockerfile"
+    },
+    [["prod", "test"]]: "."
+  }),
+  restart: "always",
+  environment: {
+    APP_DIR: match(mode, {
+      [["prod", "test"]]: "data",
+      dev: "data/app"
     }),
-    restart: "always",
-    environment: {
-      APP_DIR: match(mode, {
-        [["prod", "test"]]: "data",
-        dev: "data/app"
-      }),
-      PSQL_HOST: "psql",
-      PSQL_PORT: 5432,
-      PSQL_DATABASE: "postgres",
-      PSQL_USER: "postgres",
-      PSQL_PASS: "postgres"
-    },
-    depends_on: ["psql"],
-    volumes: match(mode, {
-      prod: ["./data/app:/home/app/data"],
-      dev: ["./:/home/app/"],
-      test: undefined
-    })
-  };
+    PSQL_HOST: "psql",
+    PSQL_PORT: 5432,
+    PSQL_DATABASE: "postgres",
+    PSQL_USER: "postgres",
+    PSQL_PASS: "postgres"
+  },
+  depends_on: ["psql"],
+  volumes: match(mode, {
+    prod: ["./data/app:/home/app/data"],
+    dev: ["./:/home/app/"],
+    test: undefined
+  })
+});
 
-  return service;
-}
-
-function compose_services_psql(mode) {
-  return {
-    restart: "always",
-    image: "postgres:10.5",
-    environment: {
-      POSTGRES_PASSWORD: "postgres"
-    },
-    volumes: ["./data/psql:/var/lib/postgresql/data"]
-  };
-}
+const compose_services_psql = mode => ({
+  restart: "always",
+  image: "postgres:10.5",
+  environment: {
+    POSTGRES_PASSWORD: "postgres"
+  },
+  volumes: ["./data/psql:/var/lib/postgresql/data"]
+});
 
 console.log(JSON.stringify(compose(get_mode())));
