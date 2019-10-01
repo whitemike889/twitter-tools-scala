@@ -9,7 +9,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: install dcdy
-        run: curl -sSf https://raw.githubusercontent.com/kgtkr/dcdy/master/install.sh | sh
+        run: |
+          mkdir -p ~/.local/bin
+          export $PATH="$PATH:$HOME/.local/bin"
+          curl -sSf https://raw.githubusercontent.com/kgtkr/dcdy/master/install.sh | sh
       - name: build
         run: DC_ENV=test dcdy build
       - name: test
