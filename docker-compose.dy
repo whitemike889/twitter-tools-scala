@@ -33,7 +33,11 @@ const compose_services_app = mode => ({
       context: ".",
       dockerfile: "dev.Dockerfile"
     },
-    [["prod", "test"]]: "."
+    prod: ".",
+    test: {
+      context: ".",
+      target: "builder"
+    }
   }),
   restart: "always",
   environment: {
