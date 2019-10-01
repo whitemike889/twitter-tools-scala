@@ -18,7 +18,7 @@ function match(val, map) {
 }
 
 const compose = mode => ({
-  version: "3",
+  version: "3.4",
   services: compose_services(mode)
 });
 
