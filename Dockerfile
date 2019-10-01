@@ -2,21 +2,28 @@ FROM ubuntu:18.04 as builder
 
 ENV HOME=/home/app
 
+SHELL ["/bin/bash", "-cl"]
+
 RUN apt update &&\
     apt -y install curl zip unzip &&\
-    curl -s "https://get.sdkman.io" | bash &&\
-    /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install java && sdk install scala && sdk install sbt"
+    curl -s "https://get.sdkman.io" | bash&&\
+    echo "source ~/.sdkman/bin/sdkman-init.sh" >> $HOME/.bash_profile
+
+
+RUN sdk install java &&\
+    sdk install scala &&\
+    sdk install sbt
 
 
 WORKDIR $HOME
 
 COPY project/build.properties $HOME/project/
-RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sbt update"
+RUN sbt update
 COPY project/plugins.sbt $HOME/project/
 COPY .scalafmt.conf build.sbt $HOME/
-RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sbt update"
+RUN sbt update
 COPY src $HOME/src
-RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sbt assembly"
+RUN sbt assembly
 
 FROM openjdk:11
 
