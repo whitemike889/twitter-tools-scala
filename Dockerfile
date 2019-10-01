@@ -14,7 +14,6 @@ RUN sdk install java &&\
     sdk install scala &&\
     sdk install sbt
 
-
 WORKDIR $HOME
 
 COPY project/build.properties $HOME/project/
@@ -24,6 +23,11 @@ COPY .scalafmt.conf build.sbt $HOME/
 RUN sbt update
 COPY src $HOME/src
 RUN sbt assembly
+
+COPY docker-entrypoint.sh docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
 
 FROM openjdk:11
 
