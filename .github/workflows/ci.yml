@@ -1,0 +1,16 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: install dcdy
+        run: curl -sSf https://raw.githubusercontent.com/kgtkr/dcdy/master/install.sh | sh
+      - name: build
+        run: DC_ENV=test dcdy build
+      - name: test
+        run: DC_ENV=test dcdy run --rm app /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sbt test"
