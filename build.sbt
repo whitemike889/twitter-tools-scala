@@ -7,7 +7,7 @@ lazy val commonSettings = Seq(
     "org.typelevel" %% "cats-core" % "2.0.0"
   ),
   scalacOptions := Seq(
-    "-Ypartial-unification"
+    "-language:higherKinds"
   )
 )
 
