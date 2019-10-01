@@ -16,4 +16,4 @@ jobs:
       - name: build
         run: DC_ENV=test dcdy build
       - name: test
-        run: DC_ENV=test dcdy run --rm app sbt test"
+        run: DC_ENV=test dcdy run --rm app sbt test
