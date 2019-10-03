@@ -37,11 +37,15 @@ const compose_services_app = env => ({
       context: ".",
       dockerfile: "dev.Dockerfile"
     },
-    prod: ".",
+    prod: env.appImage ? undefined : ".",
     test: {
       context: ".",
       target: "builder"
     }
+  }),
+  image: match_mode(env, {
+    prod: env.appImage || undefined,
+    [["dev,test"]]: undefined
   }),
   restart: "always",
   environment: {
