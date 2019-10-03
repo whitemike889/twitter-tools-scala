@@ -7,9 +7,9 @@ function get_env() {
     throw new Error();
   }
 
-  const image = process.env["DCDY_IMAGE"] || null;
+  const appImage = process.env["DCDY_APP_IMAGE"] || null;
 
-  return { mode, image };
+  return { mode, appImage };
 }
 
 function match_mode(env, map) {
