@@ -1,34 +1,38 @@
 #!/usr/bin/env node
+"use strict";
 
-function get_mode() {
-  const env = process.env["DC_ENV"];
-  if (env === "prod" || env === "dev" || env === "test") {
-    return env;
+function get_env() {
+  const mode = process.env["DCDY_MODE"];
+  if (mode !== "prod" && mode !== "dev" && mode !== "test") {
+    throw new Error();
   }
-  throw new Error();
+
+  const image = process.env["DCDY_IMAGE"] || null;
+
+  return { mode, image };
 }
 
-function match(val, map) {
+function match_mode(env, map) {
   for (let key of Object.keys(map)) {
-    if (key.split(",").includes(val)) {
+    if (key.split(",").includes(env.mode)) {
       return map[key];
     }
   }
   throw new Error();
 }
 
-const compose = mode => ({
+const compose = env => ({
   version: "3.4",
-  services: compose_services(mode)
+  services: compose_services(env)
 });
 
-const compose_services = mode => ({
-  app: compose_services_app(mode),
-  psql: compose_services_psql(mode)
+const compose_services = env => ({
+  app: compose_services_app(env),
+  psql: compose_services_psql(env)
 });
 
-const compose_services_app = mode => ({
-  build: match(mode, {
+const compose_services_app = env => ({
+  build: match_mode(env, {
     dev: {
       context: ".",
       dockerfile: "dev.Dockerfile"
@@ -41,7 +45,7 @@ const compose_services_app = mode => ({
   }),
   restart: "always",
   environment: {
-    APP_DIR: match(mode, {
+    APP_DIR: match_mode(env, {
       [["prod", "test"]]: "data",
       dev: "data/app"
     }),
@@ -52,14 +56,14 @@ const compose_services_app = mode => ({
     PSQL_PASS: "postgres"
   },
   depends_on: ["psql"],
-  volumes: match(mode, {
+  volumes: match_mode(env, {
     prod: ["./data/app:/home/app/data", "./config:/home/app/config"],
     dev: ["./:/home/app/"],
     test: ["./config:/home/app/config"]
   })
 });
 
-const compose_services_psql = mode => ({
+const compose_services_psql = env => ({
   restart: "always",
   image: "postgres:10.5",
   environment: {
@@ -68,4 +72,4 @@ const compose_services_psql = mode => ({
   volumes: ["./data/psql:/var/lib/postgresql/data"]
 });
 
-console.log(JSON.stringify(compose(get_mode())));
+console.log(JSON.stringify(compose(get_env())));

@@ -13,9 +13,9 @@ jobs:
           curl -sSf https://raw.githubusercontent.com/kgtkr/dcdy/master/install.sh | sh
           echo ::add-path::$HOME/.local/bin
       - name: build
-        run: DC_ENV=test dcdy build
+        run: DCDY_MODE=test dcdy build
       - name: test
-        run: DC_ENV=test dcdy run --rm app sbt test
+        run: DCDY_MODE=test dcdy run --rm app sbt test
   publish:
     runs-on: ubuntu-latest
     needs: [build-and-test]
