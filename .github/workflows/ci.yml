@@ -16,8 +16,6 @@ jobs:
         run: DC_ENV=test dcdy build
       - name: test
         run: DC_ENV=test dcdy run --rm app sbt test
-  # まだログインできない
-  # https://github.community/t5/GitHub-Actions/Github-Actions-Docker-login/m-p/31262#M740
   publish:
     runs-on: ubuntu-latest
     needs: [build-and-test]
