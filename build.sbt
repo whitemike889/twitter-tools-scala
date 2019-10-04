@@ -1,7 +1,5 @@
 lazy val commonSettings = Seq(
   organization := "net.kgtkr",
-  name := "twitter-tools",
-  version := "0.1",
   scalaVersion := "2.13.1",
   scalacOptions ++= Seq(
     "-language:higherKinds"
@@ -12,6 +10,8 @@ lazy val commonSettings = Seq(
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(
+    name := "twitter-tools",
+    version := "0.1",
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-core" % "2.0.0"
     ),
