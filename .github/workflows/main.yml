@@ -45,7 +45,7 @@ jobs:
       - name: build
         run: |
           mkdir release
-          DCDY_MODE=prod DCDY_APP_IMAGE=$IMAGE_TAG docker-compose.dy > release/docker-compose.yml
+          DCDY_MODE=prod DCDY_APP_IMAGE=$IMAGE_TAG ./docker-compose.dy > release/docker-compose.yml
       - name: deploy
         uses: peaceiris/actions-gh-pages@v2.4.0
         env:
