@@ -17,6 +17,8 @@ jobs:
           echo ::add-path::$HOME/.local/bin
       - name: build
         run: DCDY_MODE=test dcdy build
+      - name: scalafmt
+        run: DCDY_MODE=test dcdy run --rm app sbt scalafmtTest
       - name: test
         run: DCDY_MODE=test dcdy run --rm app sbt test
   docker-build-and-push:
