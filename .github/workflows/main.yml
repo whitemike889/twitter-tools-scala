@@ -18,7 +18,7 @@ jobs:
       - name: build
         run: DCDY_MODE=test dcdy build
       - name: scalafmt
-        run: DCDY_MODE=test dcdy run --rm app sbt scalafmtCheck
+        run: DCDY_MODE=test dcdy run --rm --no-deps app sbt scalafmtCheck
       - name: test
         run: DCDY_MODE=test dcdy run --rm app sbt test
   docker-build-and-push:
