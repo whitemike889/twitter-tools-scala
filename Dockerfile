@@ -5,14 +5,14 @@ ENV HOME=/home/app
 SHELL ["/bin/bash", "-cl"]
 
 RUN apt update &&\
-    apt -y install curl zip unzip &&\
-    curl -s "https://get.sdkman.io" | bash&&\
-    echo "source ~/.sdkman/bin/sdkman-init.sh" >> $HOME/.bash_profile
+  apt -y install curl zip unzip &&\
+  curl -s "https://get.sdkman.io" | bash&&\
+  echo "source ~/.sdkman/bin/sdkman-init.sh" >> $HOME/.bash_profile
 
 
 RUN sdk install java &&\
-    sdk install scala &&\
-    sdk install sbt
+  sdk install scala &&\
+  sdk install sbt
 
 WORKDIR $HOME
 
@@ -35,5 +35,6 @@ ENV HOME=/home/app
 WORKDIR $HOME
 
 COPY --from=builder $HOME/target/scala-2.13/app.jar .
+COPY config.yaml .
 
 CMD java -jar app.jar

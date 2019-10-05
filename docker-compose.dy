@@ -61,9 +61,9 @@ const compose_services_app = env => ({
   },
   depends_on: ["psql"],
   volumes: match_mode(env, {
-    prod: ["./data/app:/home/app/data", "./config:/home/app/config"],
+    prod: ["./data/app:/home/app/data"],
     dev: ["./:/home/app/"],
-    test: ["./config:/home/app/config"]
+    test: []
   })
 });
 

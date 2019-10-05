@@ -1,0 +1,14 @@
+consumers:
+  - &cs_hoge
+    ck: xxx
+    cs: yyy
+tokens:
+  - &tk_foo
+    tk: aaa
+    ts: bbb
+    <<: *cs_hoge
+ff_monitoring:
+  interval: 3600
+  tokens:
+    - token: *tk_foo
+      discord_hook_url: https://
