@@ -49,10 +49,11 @@ const compose_services_app = env => ({
   }),
   restart: "always",
   environment: {
-    APP_DIR: match_mode(env, {
+    APP_DATA_DIR: match_mode(env, {
       [["prod", "test"]]: "data",
       dev: "data/app"
     }),
+    CONFIG_DIR: "config",
     PSQL_HOST: "psql",
     PSQL_PORT: 5432,
     PSQL_DATABASE: "postgres",
@@ -61,9 +62,9 @@ const compose_services_app = env => ({
   },
   depends_on: ["psql"],
   volumes: match_mode(env, {
-    prod: ["./data/app:/home/app/data"],
+    prod: ["./data/app:/home/app/data", "./config:/home/app/config"],
     dev: ["./:/home/app/"],
-    test: []
+    test: ["./config:/home/app/config"]
   })
 });
 
