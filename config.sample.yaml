@@ -9,6 +9,6 @@ tokens:
     <<: *cs_hoge
 ff_monitoring:
   interval: 3600
-  tokens:
+  accounts:
     - token: *tk_foo
       discord_hook_url: https://
