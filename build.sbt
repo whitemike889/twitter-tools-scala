@@ -18,7 +18,9 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-core" % "0.12.1",
       "io.circe" %% "circe-generic" % "0.12.1",
       "io.circe" %% "circe-parser" % "0.12.1",
-      "io.circe" %% "circe-generic-extras" % "0.12.1"
+      "io.circe" %% "circe-generic-extras" % "0.12.1",
+      "org.scalactic" %% "scalactic" % "3.0.8",
+      "org.scalatest" %% "scalatest" % "3.0.8" % "test"
     ),
     mainClass in assembly := Some("net.kgtkr.twitter_tools.App"),
     assemblyJarName in assembly := "app.jar"
