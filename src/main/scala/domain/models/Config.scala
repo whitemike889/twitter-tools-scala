@@ -1,4 +1,4 @@
-package net.kgtkr.twitter_tools;
+package net.kgtkr.twitter_tools.domain.models;
 
 final case class Consumer(ck: String, cs: String);
 final case class Token(tk: String, ts: String, ck: String, cs: String);
@@ -14,7 +14,7 @@ final case class Config(
 );
 
 object Config {
-  def parseConfig(s: String): Option[Config] = {
+  def parse(s: String): Option[Config] = {
     import io.circe.yaml.parser
     import io.circe.generic.auto._
     import io.circe._
