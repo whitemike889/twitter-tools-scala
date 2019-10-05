@@ -13,7 +13,12 @@ lazy val root = (project in file("."))
     name := "twitter-tools",
     version := "0.1",
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % "2.0.0"
+      "org.typelevel" %% "cats-core" % "2.0.0",
+      "io.circe" %% "circe-yaml" % "0.11.0-M1",
+      "io.circe" %% "circe-core" % "0.12.1",
+      "io.circe" %% "circe-generic" % "0.12.1",
+      "io.circe" %% "circe-parser" % "0.12.1",
+      "io.circe" %% "circe-generic-extras" % "0.12.1"
     ),
     mainClass in assembly := Some("net.kgtkr.twitter_tools.App"),
     assemblyJarName in assembly := "app.jar"
