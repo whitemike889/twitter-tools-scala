@@ -22,7 +22,9 @@ lazy val root = (project in file("."))
       "org.scalatest" %% "scalatest" % "3.0.8" % "test",
       "dev.zio" %% "zio" % "1.0.0-RC14",
       "dev.zio" %% "zio-streams" % "1.0.0-RC14",
-      "org.typelevel" %% "cats-tagless-macros" % "0.10"
+      "org.typelevel" %% "cats-tagless-macros" % "0.10",
+      "org.typelevel" %% "cats-mtl-core" % "0.7.0",
+      "org.typelevel" %% "cats-effect" % "2.0.0"
     ),
     mainClass in assembly := Some("net.kgtkr.twitter_tools.App"),
     assemblyJarName in assembly := "app.jar"
