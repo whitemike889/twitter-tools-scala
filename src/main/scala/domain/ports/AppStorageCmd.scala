@@ -3,14 +3,14 @@ import cats.Monad
 import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.AppError
 
-sealed trait FileCmdError;
-object FileCmdError {
-  final case class NotFound() extends FileCmdError
-  final case class AlreadyExists() extends FileCmdError
+sealed trait AppStorageCmdError;
+object AppStorageCmdError {
+  final case class NotFound() extends AppStorageCmdError
+  final case class AlreadyExists() extends AppStorageCmdError
 }
 
-trait FileCmd[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, FileCmdError], A]
+trait AppStorageCmd[F[_]] {
+  type Result[A] = EitherT[F, AppError[Any, AppStorageCmdError], A]
 
   /**
     * ファイルに書き込む
@@ -40,7 +40,7 @@ trait FileCmd[F[_]] {
   def mkdir(path: String): Result[Unit]
 }
 
-object FileCmd {
-  def apply[F[_]](implicit x: FileCmd[F]): FileCmd[F] =
+object AppStorageCmd {
+  def apply[F[_]](implicit x: AppStorageCmd[F]): AppStorageCmd[F] =
     x
 }

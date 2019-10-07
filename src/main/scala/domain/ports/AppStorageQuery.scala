@@ -3,13 +3,13 @@ import cats.Monad
 import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.AppError
 
-sealed trait FileQueryError;
-object FileQueryError {
-  final case class NotFound() extends FileQueryError
+sealed trait AppStorageQueryError;
+object AppStorageQueryError {
+  final case class NotFound() extends AppStorageQueryError
 }
 
-trait FileQuery[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, FileQueryError], A]
+trait AppStorageQuery[F[_]] {
+  type Result[A] = EitherT[F, AppError[Any, AppStorageQueryError], A]
 
   /**
     * ファイルを読み込む
@@ -30,7 +30,7 @@ trait FileQuery[F[_]] {
   def readDir(path: String): Result[List[String]]
 }
 
-object FileQuery {
-  def apply[F[_]](implicit x: FileQuery[F]): FileQuery[F] =
+object AppStorageQuery {
+  def apply[F[_]](implicit x: AppStorageQuery[F]): AppStorageQuery[F] =
     x
 }
