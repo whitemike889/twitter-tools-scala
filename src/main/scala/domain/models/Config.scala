@@ -1,7 +1,6 @@
 package net.kgtkr.twitter_tools.domain.models;
 
 final case class Consumer(ck: String, cs: String);
-final case class Token(tk: String, ts: String, ck: String, cs: String);
 final case class FFMonitoring(
     interval: Int,
     accounts: List[FFMonitoringAccount]
