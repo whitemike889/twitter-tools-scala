@@ -35,6 +35,5 @@ ENV HOME=/home/app
 WORKDIR $HOME
 
 COPY --from=builder $HOME/target/scala-2.13/app.jar .
-COPY config.yaml .
 
 CMD java -jar app.jar
