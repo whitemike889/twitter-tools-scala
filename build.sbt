@@ -4,7 +4,8 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
     "-language:higherKinds"
   ),
-  wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Any)
+  wartremoverErrors in (Compile, compile) ++= Warts
+    .allBut(Wart.Any, Wart.DefaultArguments)
 )
 
 lazy val root = (project in file("."))
