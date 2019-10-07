@@ -1,3 +1,8 @@
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin(
+  "org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full
+)
+
 lazy val commonSettings = Seq(
   organization := "net.kgtkr",
   scalaVersion := "2.13.1",
