@@ -12,14 +12,31 @@ object FileCmdError {
 trait FileCmd[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, FileCmdError], A]
 
+  /**
+    * ファイルに書き込む
+    * ファイルが存在しなければ作る
+    * ディレクトリが存在しなければNotFound
+    */
   def writeFile(
       path: String,
       content: String
   ): Result[Unit]
+
+  /**
+    * ファイルまたはディレクトリを削除する
+    * 存在しなければNotFound
+    * ディレクトリの場合は中身も再帰的に削除される
+    */
   def delete(
       path: String,
       content: String
   ): Result[Unit]
+
+  /**
+    * ディレクトリを作る
+    * 既に存在する場合はAlreadyExists
+    * 子ディレクトリが存在しない場合再帰的に作られる
+    */
   def mkdir(path: String): Result[Unit]
 }
 
