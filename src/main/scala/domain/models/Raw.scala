@@ -9,7 +9,7 @@ sealed trait Raw {
   val raw: Json
 }
 
-final case class UserRaw(val id: Long, val createdAt: OffsetDateTime, raw: Json)
+final case class UserRaw(id: Long, createdAt: OffsetDateTime, raw: Json)
     extends Raw;
 
 final case class StatusRaw(
