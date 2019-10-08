@@ -5,11 +5,8 @@ import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.RawId
 
-sealed trait RawRepositoryQueryError;
-object RawRepositoryQueryError {}
-
 trait RawRepositoryQuery[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, RawRepositoryQueryError], A]
+  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def findLatest(
       ids: List[RawId]

@@ -5,11 +5,8 @@ import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.FF
 import net.kgtkr.twitter_tools.domain.models.UserId
 
-sealed trait FFRepositoryQueryError;
-object FFRepositoryQueryError {}
-
 trait FFRepositoryQuery[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, FFRepositoryQueryError], A]
+  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def findUser(
       userId: UserId,

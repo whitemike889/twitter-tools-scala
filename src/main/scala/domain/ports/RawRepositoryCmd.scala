@@ -4,11 +4,8 @@ import net.kgtkr.twitter_tools.domain.models.AppError
 import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.Raw
 
-sealed trait RawRepositoryCmdError;
-object RawRepositoryCmdError {}
-
 trait RawRepositoryCmd[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, RawRepositoryCmdError], A]
+  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def insertAll(
       raws: List[Raw]

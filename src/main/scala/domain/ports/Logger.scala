@@ -12,11 +12,8 @@ object LogLevel {
   final case class Trace() extends LogLevel
 }
 
-sealed trait LoggerError;
-object LoggerError {}
-
 trait Logger[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, LoggerError], A]
+  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def log(level: LogLevel, msg: String): Result[Unit]
 }

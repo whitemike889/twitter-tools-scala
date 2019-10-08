@@ -6,11 +6,8 @@ import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 
-sealed trait TwitterClientQueryError;
-object TwitterClientQueryError {}
-
 trait TwitterClientQuery[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, TwitterClientQueryError], A]
+  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def fetchAuthUserId(): Result[UserId]
 
