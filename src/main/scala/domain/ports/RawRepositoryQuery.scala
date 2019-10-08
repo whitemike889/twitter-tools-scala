@@ -3,6 +3,7 @@ package net.kgtkr.twitter_tools.domain.ports;
 import net.kgtkr.twitter_tools.domain.models.AppError
 import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.Raw
+import net.kgtkr.twitter_tools.domain.models.RawId
 
 sealed trait RawRepositoryQueryError;
 object RawRepositoryQueryError {}
@@ -11,7 +12,7 @@ trait RawRepositoryQuery[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, RawRepositoryQueryError], A]
 
   def findLatest(
-      ids: List[Raw#I]
+      ids: List[RawId]
   ): Result[List[Raw]]
 }
 
