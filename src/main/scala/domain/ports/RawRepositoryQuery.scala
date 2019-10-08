@@ -8,9 +8,9 @@ import net.kgtkr.twitter_tools.domain.models.RawId
 trait RawRepositoryQuery[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
-  def findLatest(
-      ids: List[RawId]
-  ): Result[List[Raw]]
+  def findLatest[A <: Raw](
+      ids: List[A#I]
+  ): Result[List[A]]
 }
 
 object RawRepositoryQuery {
