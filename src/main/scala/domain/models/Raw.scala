@@ -3,8 +3,12 @@ package net.kgtkr.twitter_tools.domain.models
 import java.time.OffsetDateTime
 import io.circe.Json
 
+trait RawId extends Any {
+  def value: Long;
+}
+
 sealed trait Raw {
-  type I;
+  type I <: RawId;
 
   val id: I;
   val createdAt: OffsetDateTime;
