@@ -10,7 +10,7 @@ lazy val commonSettings = Seq(
     "-language:higherKinds"
   ),
   wartremoverErrors in (Compile, compile) ++= Warts
-    .allBut(Wart.Any, Wart.DefaultArguments)
+    .allBut(Wart.Any, Wart.Nothing, Wart.DefaultArguments)
 )
 
 lazy val root = (project in file("."))
