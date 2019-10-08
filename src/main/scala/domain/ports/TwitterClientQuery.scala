@@ -1,7 +1,6 @@
 package net.kgtkr.twitter_tools.domain.ports;
 
 import cats.data.EitherT
-import cats.data.ReaderT
 import net.kgtkr.twitter_tools.domain.models.AppError
 import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
@@ -11,8 +10,7 @@ sealed trait TwitterClientQueryError;
 object TwitterClientQueryError {}
 
 trait TwitterClientQuery[F[_]] {
-  type Result[A] =
-    ReaderT[EitherT[F, AppError[Any, TwitterClientQueryError], *], Token, A]
+  type Result[A] = EitherT[F, AppError[Any, TwitterClientQueryError], A]
 
   def fetchAuthUserId(): Result[UserId]
 
