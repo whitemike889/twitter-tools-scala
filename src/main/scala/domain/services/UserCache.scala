@@ -14,11 +14,15 @@ import net.kgtkr.twitter_tools.domain.models.UserRaw
 import cats.data.ReaderT
 import net.kgtkr.twitter_tools.domain.models.Token
 import scala.util.chaining._
+import org.atnos.eff._, all._
+import cats.data.Reader
+import org.atnos.eff.Members.{&:, &&:}
 
 trait UserCacheSYM[F[_]] {
-  type Result[A] = ReaderT[F, Token, A]
+  type _readerToken[R] = Reader[Token, ?] |= R
+  type _effects[R] = _readerToken[R]
 
-  def lookupUsers(ids: Set[UserId]): Result[Map[UserId, Raw]]
+  def lookupUsers[R: _effects](ids: Set[UserId]): Eff[R, Map[UserId, Raw]]
 }
 
 object UserCacheSYM {
@@ -28,20 +32,18 @@ object UserCacheSYM {
 
 final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySYM: TwitterClientQuerySYM]
     extends UserCacheSYM[F] {
-  override def lookupUsers(
+  override def lookupUsers[R: _effects](
       ids: Set[UserId]
-  ): Result[Map[UserId, Raw]] = {
+  ): Eff[R, Map[UserId, Raw]] = {
     for {
       dbUsers <- RawRepositoryQuerySYM[F]
-        .findLatest[UserRaw](ids.toList)
+        .findLatest[R, UserRaw](ids.toList)
         .map(_.map(x => (x.id, x)).toMap)
-        .pipe(ReaderT.liftF)
-      fetchedUserArr <- TwitterClientQuerySYM[F].lookupUsers(
+      fetchedUserArr <- TwitterClientQuerySYM[F].lookupUsers[R](
         ids.diff(dbUsers.keySet).toList
       )
       _ <- RawRepositoryCmdSYM[F]
-        .insertAll(fetchedUserArr)
-        .pipe(ReaderT.liftF)
+        .insertAll[R](fetchedUserArr)
     } yield (dbUsers.toSeq ++ fetchedUserArr.map(x => (x.id, x)).toSeq).toMap
   }
 }

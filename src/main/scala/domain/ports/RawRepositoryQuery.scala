@@ -2,11 +2,14 @@ package net.kgtkr.twitter_tools.domain.ports;
 
 import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.RawId
+import org.atnos.eff._, all._
+import cats.data.Reader
+import org.atnos.eff.Members.{&:, &&:}
 
 trait RawRepositoryQuerySYM[F[_]] {
-  def findLatest[A <: Raw](
+  def findLatest[R, A <: Raw](
       ids: List[A#I]
-  ): F[List[A]]
+  ): Eff[R, List[A]]
 }
 
 object RawRepositoryQuerySYM {
