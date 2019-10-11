@@ -1,12 +1,11 @@
 package net.kgtkr.twitter_tools.domain.ports;
 
 import net.kgtkr.twitter_tools.domain.models.Raw
-import org.atnos.eff._
 
 trait RawRepositoryCmdSYM[F[_]] {
-  def insertAll[R](
+  def insertAll(
       raws: List[Raw]
-  ): Eff[R, Unit]
+  ): F[Unit]
 }
 
 object RawRepositoryCmdSYM {

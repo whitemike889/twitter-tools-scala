@@ -7,17 +7,16 @@ import cats.data._
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryCmdSYM
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryQuerySYM
 import net.kgtkr.twitter_tools.domain.ports.TwitterClientQuerySYM
-import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.models.Token
-import org.atnos.eff._
 import cats.data.Reader
+import cats.data.ReaderT
+import scala.util.chaining._
 
 trait UserCacheSYM[F[_]] {
-  type _readerToken[R] = Reader[Token, ?] |= R
-  type _effects[R] = _readerToken[R]
-
-  def lookupUsers[R: _effects](ids: Set[UserId]): Eff[R, Map[UserId, Raw]]
+  def lookupUsers(
+      ids: Set[UserId]
+  ): Reader[Token, F[Map[UserId, UserRaw]]]
 }
 
 object UserCacheSYM {
@@ -27,18 +26,30 @@ object UserCacheSYM {
 
 final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySYM: TwitterClientQuerySYM]
     extends UserCacheSYM[F] {
-  override def lookupUsers[R: _effects](
+
+  private def runId[A](x: Id[A]): A = x
+
+  override def lookupUsers(
       ids: Set[UserId]
-  ): Eff[R, Map[UserId, Raw]] = {
-    for {
+  ): Reader[Token, F[Map[UserId, UserRaw]]] = {
+    (for {
       dbUsers <- RawRepositoryQuerySYM[F]
-        .findLatest[R, UserRaw](ids.toList)
+        .findLatest[UserRaw](ids.toList)
+        .pipe(ReaderT.liftF)
         .map(_.map(x => (x.id, x)).toMap)
-      fetchedUserArr <- TwitterClientQuerySYM[F].lookupUsers[R](
-        ids.diff(dbUsers.keySet).toList
-      )
+      fetchedUserArr <- TwitterClientQuerySYM[F]
+        .lookupUsers(
+          ids.diff(dbUsers.keySet).toList
+        )
+        .run
+        .andThen(runId)
+        .pipe(ReaderT(_))
       _ <- RawRepositoryCmdSYM[F]
-        .insertAll[R](fetchedUserArr)
-    } yield (dbUsers.toSeq ++ fetchedUserArr.map(x => (x.id, x)).toSeq).toMap
+        .insertAll(fetchedUserArr)
+        .pipe(ReaderT.liftF)
+    } yield (dbUsers.toSeq ++ fetchedUserArr
+      .map(x => (x.id, x))
+      .toSeq).toMap).run
+      .pipe(Reader(_))
   }
 }

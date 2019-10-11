@@ -4,20 +4,16 @@ import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.models.Token
-import org.atnos.eff._
 import cats.data.Reader
 
 trait TwitterClientQuerySYM[F[_]] {
-  type _readerToken[R] = Reader[Token, ?] |= R
-  type _effects[R] = _readerToken[R]
+  def fetchAuthUserId(): Reader[Token, F[UserId]]
 
-  def fetchAuthUserId[R: _effects](): Eff[R, UserId]
+  def fetchFollowers(userId: UserId): Reader[Token, F[List[UserId]]]
 
-  def fetchFollowers[R: _effects](userId: UserId): Eff[R, List[UserId]]
+  def fetchFriends(userId: UserId): Reader[Token, F[List[UserId]]]
 
-  def fetchFriends[R: _effects](userId: UserId): Eff[R, List[UserId]]
-
-  def lookupUsers[R: _effects](ids: List[UserId]): Eff[R, List[UserRaw]]
+  def lookupUsers(ids: List[UserId]): Reader[Token, F[List[UserRaw]]]
 }
 
 object TwitterClientQuerySYM {
