@@ -4,13 +4,13 @@ import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.AppError
 import net.kgtkr.twitter_tools.domain.models.DiscordPayload
 
-trait DiscordHook[F[_]] {
+trait DiscordHookSYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def post(payload: DiscordPayload): Result[Unit]
 }
 
-object DiscordHook {
-  def apply[F[_]](implicit x: DiscordHook[F]): DiscordHook[F] =
+object DiscordHookSYM {
+  def apply[F[_]](implicit x: DiscordHookSYM[F]): DiscordHookSYM[F] =
     x
 }

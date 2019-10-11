@@ -9,7 +9,7 @@ object AppStorageCmdError {
   final case class AlreadyExists() extends AppStorageCmdError
 }
 
-trait AppStorageCmd[F[_]] {
+trait AppStorageCmdSYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, AppStorageCmdError], A]
 
   /**
@@ -40,7 +40,7 @@ trait AppStorageCmd[F[_]] {
   def mkdir(path: String): Result[Unit]
 }
 
-object AppStorageCmd {
-  def apply[F[_]](implicit x: AppStorageCmd[F]): AppStorageCmd[F] =
+object AppStorageCmdSYM {
+  def apply[F[_]](implicit x: AppStorageCmdSYM[F]): AppStorageCmdSYM[F] =
     x
 }

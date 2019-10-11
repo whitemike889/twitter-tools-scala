@@ -10,7 +10,7 @@ object ConfigLoaderError {
   final case class Validation() extends ConfigLoaderError
 }
 
-trait ConfigLoader[F[_]] {
+trait ConfigLoaderSYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, ConfigLoaderError], A]
 
   /**
@@ -22,7 +22,7 @@ trait ConfigLoader[F[_]] {
   def readConfig(path: String): Result[String]
 }
 
-object ConfigLoader {
-  def apply[F[_]](implicit x: ConfigLoader[F]): ConfigLoader[F] =
+object ConfigLoaderSYM {
+  def apply[F[_]](implicit x: ConfigLoaderSYM[F]): ConfigLoaderSYM[F] =
     x
 }

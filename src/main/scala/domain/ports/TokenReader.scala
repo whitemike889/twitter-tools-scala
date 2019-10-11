@@ -2,11 +2,11 @@ package net.kgtkr.twitter_tools.domain.ports;
 
 import net.kgtkr.twitter_tools.domain.models.Token
 
-trait TokenReader[F[_]] {
+trait TokenReaderSYM[F[_]] {
   def token(): F[Token]
 }
 
-object TokenReader {
-  def apply[F[_]](implicit x: TokenReader[F]): TokenReader[F] =
+object TokenReaderSYM {
+  def apply[F[_]](implicit x: TokenReaderSYM[F]): TokenReaderSYM[F] =
     x
 }

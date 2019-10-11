@@ -4,7 +4,7 @@ import net.kgtkr.twitter_tools.domain.models.AppError
 import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.FF
 
-trait FFRepositoryCmd[F[_]] {
+trait FFRepositoryCmdSYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def insert(
@@ -12,7 +12,7 @@ trait FFRepositoryCmd[F[_]] {
   ): Result[Unit]
 }
 
-object FFRepositoryCmd {
-  def apply[F[_]](implicit x: FFRepositoryCmd[F]): FFRepositoryCmd[F] =
+object FFRepositoryCmdSYM {
+  def apply[F[_]](implicit x: FFRepositoryCmdSYM[F]): FFRepositoryCmdSYM[F] =
     x
 }

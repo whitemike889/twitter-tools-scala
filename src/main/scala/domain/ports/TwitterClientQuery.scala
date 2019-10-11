@@ -6,7 +6,7 @@ import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 
-trait TwitterClientQuery[F[_]] {
+trait TwitterClientQuerySYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def fetchAuthUserId(): Result[UserId]
@@ -18,7 +18,9 @@ trait TwitterClientQuery[F[_]] {
   def lookupUsers(ids: List[UserId]): Result[List[UserRaw]]
 }
 
-object TwitterClientQuery {
-  def apply[F[_]](implicit x: TwitterClientQuery[F]): TwitterClientQuery[F] =
+object TwitterClientQuerySYM {
+  def apply[F[_]](
+      implicit x: TwitterClientQuerySYM[F]
+  ): TwitterClientQuerySYM[F] =
     x
 }

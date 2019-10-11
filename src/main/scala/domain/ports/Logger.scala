@@ -12,13 +12,13 @@ object LogLevel {
   final case class Trace() extends LogLevel
 }
 
-trait Logger[F[_]] {
+trait LoggerSYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def log(level: LogLevel, msg: String): Result[Unit]
 }
 
-object Logger {
-  def apply[F[_]](implicit x: Logger[F]): Logger[F] =
+object LoggerSYM {
+  def apply[F[_]](implicit x: LoggerSYM[F]): LoggerSYM[F] =
     x
 }

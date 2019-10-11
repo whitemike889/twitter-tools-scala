@@ -8,7 +8,7 @@ object AppStorageQueryError {
   final case class NotFound() extends AppStorageQueryError
 }
 
-trait AppStorageQuery[F[_]] {
+trait AppStorageQuerySYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, AppStorageQueryError], A]
 
   /**
@@ -30,7 +30,7 @@ trait AppStorageQuery[F[_]] {
   def readDir(path: String): Result[List[String]]
 }
 
-object AppStorageQuery {
-  def apply[F[_]](implicit x: AppStorageQuery[F]): AppStorageQuery[F] =
+object AppStorageQuerySYM {
+  def apply[F[_]](implicit x: AppStorageQuerySYM[F]): AppStorageQuerySYM[F] =
     x
 }

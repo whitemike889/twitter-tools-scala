@@ -5,7 +5,7 @@ import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.RawId
 
-trait RawRepositoryQuery[F[_]] {
+trait RawRepositoryQuerySYM[F[_]] {
   type Result[A] = EitherT[F, AppError[Any, Nothing], A]
 
   def findLatest[A <: Raw](
@@ -13,7 +13,9 @@ trait RawRepositoryQuery[F[_]] {
   ): Result[List[A]]
 }
 
-object RawRepositoryQuery {
-  def apply[F[_]](implicit x: RawRepositoryQuery[F]): RawRepositoryQuery[F] =
+object RawRepositoryQuerySYM {
+  def apply[F[_]](
+      implicit x: RawRepositoryQuerySYM[F]
+  ): RawRepositoryQuerySYM[F] =
     x
 }
