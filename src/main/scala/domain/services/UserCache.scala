@@ -13,6 +13,7 @@ import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import cats.data.ReaderT
 import net.kgtkr.twitter_tools.domain.models.Token
+import scala.util.chaining._
 
 trait UserCacheSYM[F[_]] {
   type Result[A] = ReaderT[F, Token, A]
@@ -31,15 +32,16 @@ final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySY
       ids: Set[UserId]
   ): Result[Map[UserId, Raw]] = {
     for {
-      dbUsers <- ReaderT.liftF(
-        RawRepositoryQuerySYM[F]
-          .findLatest[UserRaw](ids.toList)
-          .map(_.map(x => (x.id, x)).toMap)
-      )
+      dbUsers <- RawRepositoryQuerySYM[F]
+        .findLatest[UserRaw](ids.toList)
+        .map(_.map(x => (x.id, x)).toMap)
+        .pipe(ReaderT.liftF)
       fetchedUserArr <- TwitterClientQuerySYM[F].lookupUsers(
         ids.diff(dbUsers.keySet).toList
       )
-      _ <- ReaderT.liftF(RawRepositoryCmdSYM[F].insertAll(fetchedUserArr))
+      _ <- RawRepositoryCmdSYM[F]
+        .insertAll(fetchedUserArr)
+        .pipe(ReaderT.liftF)
     } yield (dbUsers.toSeq ++ fetchedUserArr.map(x => (x.id, x)).toSeq).toMap
   }
 }
