@@ -12,9 +12,9 @@ import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.ports.UserCacheSYM
 
-class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySYM: TwitterClientQuerySYM]
+final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySYM: TwitterClientQuerySYM]
     extends UserCacheSYM[F] {
-  def lookupUsers(
+  override def lookupUsers(
       ids: Set[UserId]
   ): Result[Map[UserId, Raw]] = {
     for {
