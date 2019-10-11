@@ -10,7 +10,17 @@ import net.kgtkr.twitter_tools.domain.models.AppError
 import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.UserRaw
-import net.kgtkr.twitter_tools.domain.ports.UserCacheSYM
+
+trait UserCacheSYM[F[_]] {
+  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
+
+  def lookupUsers(ids: Set[UserId]): Result[Map[UserId, Raw]]
+}
+
+object UserCacheSYM {
+  def apply[F[_]](implicit x: UserCacheSYM[F]): UserCacheSYM[F] =
+    x
+}
 
 final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySYM: TwitterClientQuerySYM]
     extends UserCacheSYM[F] {
