@@ -9,6 +9,10 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
     "-language:higherKinds"
   ),
+  scalacOptions in (Compile, compile) ++= Seq(
+    "-Ywarn-unused",
+    "-Ywarn-macros:after"
+  ),
   wartremoverErrors in (Compile, compile) ++= Warts
     .allBut(Wart.Any, Wart.Nothing, Wart.DefaultArguments)
 )

@@ -1,9 +1,7 @@
 package net.kgtkr.twitter_tools.domain.services;
 
-import cats.syntax.monad
 import net.kgtkr.twitter_tools.domain.models.UserId
 import cats.Monad
-import cats.implicits._
 import cats._
 import cats.data._
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryCmdSYM
@@ -11,12 +9,9 @@ import net.kgtkr.twitter_tools.domain.ports.RawRepositoryQuerySYM
 import net.kgtkr.twitter_tools.domain.ports.TwitterClientQuerySYM
 import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.UserRaw
-import cats.data.ReaderT
 import net.kgtkr.twitter_tools.domain.models.Token
-import scala.util.chaining._
-import org.atnos.eff._, all._
+import org.atnos.eff._
 import cats.data.Reader
-import org.atnos.eff.Members.{&:, &&:}
 
 trait UserCacheSYM[F[_]] {
   type _readerToken[R] = Reader[Token, ?] |= R

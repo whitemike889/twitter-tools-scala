@@ -4,10 +4,8 @@ import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.models.Token
-import cats.data.ReaderT
-import org.atnos.eff._, all._, syntax.all._
+import org.atnos.eff._
 import cats.data.Reader
-import org.atnos.eff.Members.{&:, &&:}
 
 trait TwitterClientQuerySYM[F[_]] {
   type _readerToken[R] = Reader[Token, ?] |= R

@@ -1,5 +1,4 @@
 package net.kgtkr.twitter_tools.domain.ports;
-import cats.Monad
 import cats.data.EitherT
 
 sealed trait AppStorageCmdError;
