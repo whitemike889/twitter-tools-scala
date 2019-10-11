@@ -1,7 +1,6 @@
 package net.kgtkr.twitter_tools.domain.ports;
 
 import cats.data.EitherT
-import net.kgtkr.twitter_tools.domain.models.AppError
 
 sealed trait ConfigLoaderError;
 object ConfigLoaderError {
@@ -11,7 +10,7 @@ object ConfigLoaderError {
 }
 
 trait ConfigLoaderSYM[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, ConfigLoaderError], A]
+  type Result[A] = EitherT[F, ConfigLoaderError, A]
 
   /**
     * 設定ファイルを読み込む

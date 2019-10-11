@@ -3,18 +3,15 @@ package net.kgtkr.twitter_tools.domain.services;
 import cats.syntax.monad
 import net.kgtkr.twitter_tools.domain.models.UserId
 import cats.Monad
+import cats.implicits._
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryCmdSYM
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryQuerySYM
 import net.kgtkr.twitter_tools.domain.ports.TwitterClientQuerySYM
-import net.kgtkr.twitter_tools.domain.models.AppError
-import cats.data.EitherT
 import net.kgtkr.twitter_tools.domain.models.Raw
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 
 trait UserCacheSYM[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
-
-  def lookupUsers(ids: Set[UserId]): Result[Map[UserId, Raw]]
+  def lookupUsers(ids: Set[UserId]): F[Map[UserId, Raw]]
 }
 
 object UserCacheSYM {
@@ -26,7 +23,7 @@ final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySY
     extends UserCacheSYM[F] {
   override def lookupUsers(
       ids: Set[UserId]
-  ): Result[Map[UserId, Raw]] = {
+  ): F[Map[UserId, Raw]] = {
     for {
       dbUsers <- RawRepositoryQuerySYM[F]
         .findLatest[UserRaw](ids.toList)

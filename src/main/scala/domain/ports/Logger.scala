@@ -1,8 +1,5 @@
 package net.kgtkr.twitter_tools.domain.ports;
 
-import cats.data.EitherT
-import net.kgtkr.twitter_tools.domain.models.AppError
-
 sealed trait LogLevel;
 object LogLevel {
   final case class Error() extends LogLevel
@@ -13,9 +10,7 @@ object LogLevel {
 }
 
 trait LoggerSYM[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, Nothing], A]
-
-  def log(level: LogLevel, msg: String): Result[Unit]
+  def log(level: LogLevel, msg: String): F[Unit]
 }
 
 object LoggerSYM {

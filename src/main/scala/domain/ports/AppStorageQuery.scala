@@ -1,7 +1,6 @@
 package net.kgtkr.twitter_tools.domain.ports;
 import cats.Monad
 import cats.data.EitherT
-import net.kgtkr.twitter_tools.domain.models.AppError
 
 sealed trait AppStorageQueryError;
 object AppStorageQueryError {
@@ -9,7 +8,7 @@ object AppStorageQueryError {
 }
 
 trait AppStorageQuerySYM[F[_]] {
-  type Result[A] = EitherT[F, AppError[Any, AppStorageQueryError], A]
+  type Result[A] = EitherT[F, AppStorageQueryError, A]
 
   /**
     * ファイルを読み込む
