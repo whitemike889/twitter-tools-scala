@@ -4,10 +4,10 @@ import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.models.Token
-import cats.data.Reader
+import cats.data.ReaderT
 
 trait TwitterClientQuerySYM[F[_]] {
-  type Result[T] = Reader[Token, F[T]]
+  type Result[T] = ReaderT[F, Token, T]
 
   def fetchAuthUserId(): Result[UserId]
 
