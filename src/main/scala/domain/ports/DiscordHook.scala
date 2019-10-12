@@ -3,7 +3,9 @@ package net.kgtkr.twitter_tools.domain.ports;
 import net.kgtkr.twitter_tools.domain.models.DiscordPayload
 
 trait DiscordHookSYM[F[_]] {
-  def post(payload: DiscordPayload): F[Unit]
+  type Result[T] = F[T]
+
+  def post(payload: DiscordPayload): Result[Unit]
 }
 
 object DiscordHookSYM {

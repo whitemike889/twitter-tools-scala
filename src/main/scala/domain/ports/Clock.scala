@@ -3,7 +3,8 @@ package net.kgtkr.twitter_tools.domain.ports;
 import java.time.OffsetDateTime
 
 trait ClockSYM[F[_]] {
-  def currentDate(): F[OffsetDateTime]
+  type Result[T] = F[T]
+  def currentDate(): Result[OffsetDateTime]
 }
 
 object ClockSYM {

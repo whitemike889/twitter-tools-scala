@@ -15,9 +15,11 @@ import scala.util.chaining._
 import net.kgtkr.twitter_tools.utils._
 
 trait UserCacheSYM[F[_]] {
+  type Result[T] = Reader[Token, F[T]]
+
   def lookupUsers(
       ids: Set[UserId]
-  ): Reader[Token, F[Map[UserId, UserRaw]]]
+  ): Result[Map[UserId, UserRaw]]
 }
 
 object UserCacheSYM {

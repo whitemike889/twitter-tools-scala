@@ -4,10 +4,12 @@ import net.kgtkr.twitter_tools.domain.models.FF
 import net.kgtkr.twitter_tools.domain.models.UserId
 
 trait FFRepositoryQuerySYM[F[_]] {
+  type Result[T] = F[T]
+
   def findUser(
       userId: UserId,
       limit: Int
-  ): F[List[FF]]
+  ): Result[List[FF]]
 }
 
 object FFRepositoryQuerySYM {

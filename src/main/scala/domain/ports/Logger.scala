@@ -10,7 +10,9 @@ object LogLevel {
 }
 
 trait LoggerSYM[F[_]] {
-  def log(level: LogLevel, msg: String): F[Unit]
+  type Result[T] = F[T]
+
+  def log(level: LogLevel, msg: String): Result[Unit]
 }
 
 object LoggerSYM {

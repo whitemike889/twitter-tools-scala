@@ -3,9 +3,11 @@ package net.kgtkr.twitter_tools.domain.ports;
 import net.kgtkr.twitter_tools.domain.models.Raw
 
 trait RawRepositoryCmdSYM[F[_]] {
+  type Result[T] = F[T]
+
   def insertAll(
       raws: List[Raw]
-  ): F[Unit]
+  ): Result[Unit]
 }
 
 object RawRepositoryCmdSYM {
