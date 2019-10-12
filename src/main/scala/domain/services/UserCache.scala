@@ -12,6 +12,7 @@ import net.kgtkr.twitter_tools.domain.models.Token
 import cats.data.Reader
 import cats.data.ReaderT
 import scala.util.chaining._
+import net.kgtkr.twitter_tools.utils._
 
 trait UserCacheSYM[F[_]] {
   def lookupUsers(
@@ -27,8 +28,6 @@ object UserCacheSYM {
 final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySYM: TwitterClientQuerySYM]
     extends UserCacheSYM[F] {
 
-  private def runId[A](x: Id[A]): A = x
-
   override def lookupUsers(
       ids: Set[UserId]
   ): Reader[Token, F[Map[UserId, UserRaw]]] = {
@@ -41,15 +40,12 @@ final class UserCacheImpl[F[_]: Monad: RawRepositoryCmdSYM: RawRepositoryQuerySY
         .lookupUsers(
           ids.diff(dbUsers.keySet).toList
         )
-        .run
-        .andThen(runId)
-        .pipe(ReaderT(_))
+        .toReaderT
       _ <- RawRepositoryCmdSYM[F]
         .insertAll(fetchedUserArr)
         .pipe(ReaderT.liftF)
     } yield (dbUsers.toSeq ++ fetchedUserArr
       .map(x => (x.id, x))
-      .toSeq).toMap).run
-      .pipe(Reader(_))
+      .toSeq).toMap).runReaderT
   }
 }
