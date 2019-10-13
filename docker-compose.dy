@@ -45,7 +45,7 @@ const compose_services_app = env => ({
   }),
   image: match_mode(env, {
     prod: env.appImage || undefined,
-    [["dev,test"]]: undefined
+    [["dev", "test"]]: undefined
   }),
   restart: "always",
   environment: {
