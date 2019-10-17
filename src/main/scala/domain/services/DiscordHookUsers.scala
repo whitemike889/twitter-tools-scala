@@ -7,9 +7,10 @@ import net.kgtkr.twitter_tools.domain.ports.DiscordHookSYM
 import net.kgtkr.twitter_tools.domain.models.DiscordPayload
 
 trait DiscordHookUsersSYM[F[_]] {
-  type Result[T] = ReaderT[F, String, T]
+  type Result[T] = F[T]
 
   def postUsers(
+      url: String,
       content: String,
       users: List[UserRaw]
   ): Result[Unit]
@@ -24,10 +25,12 @@ final class DiscordHookUsersImpl[F[_]: DiscordHookSYM]
     extends DiscordHookUsersSYM[F] {
 
   override def postUsers(
+      url: String,
       content: String,
       users: List[UserRaw]
   ): Result[Unit] = {
     DiscordHookSYM[F].post(
+      url,
       DiscordPayload(
         content,
         Some(users.map(DiscordHookUsersImpl.userToEmbed))

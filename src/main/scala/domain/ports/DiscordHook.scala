@@ -4,9 +4,9 @@ import net.kgtkr.twitter_tools.domain.models.DiscordPayload
 import cats.data.ReaderT
 
 trait DiscordHookSYM[F[_]] {
-  type Result[T] = ReaderT[F, String, T]
+  type Result[T] = F[T]
 
-  def post(payload: DiscordPayload): Result[Unit]
+  def post(url: String, payload: DiscordPayload): Result[Unit]
 }
 
 object DiscordHookSYM {
