@@ -4,7 +4,6 @@ import net.kgtkr.twitter_tools.domain.models.UserId
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.models.Token
-import cats.data.ReaderT
 
 trait TwitterClientQuerySYM[F[_]] {
   type Result[T] = F[T]

@@ -3,14 +3,11 @@ package net.kgtkr.twitter_tools.domain.services;
 import net.kgtkr.twitter_tools.domain.models.UserId
 import cats.Monad
 import cats._
-import cats.data._
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryCmdSYM
 import net.kgtkr.twitter_tools.domain.ports.RawRepositoryQuerySYM
 import net.kgtkr.twitter_tools.domain.ports.TwitterClientQuerySYM
 import net.kgtkr.twitter_tools.domain.models.UserRaw
 import net.kgtkr.twitter_tools.domain.models.Token
-import cats.data.ReaderT
-import scala.util.chaining._
 import cats.implicits._
 
 trait UserCacheSYM[F[_]] {

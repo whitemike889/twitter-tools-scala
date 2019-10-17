@@ -1,6 +1,5 @@
 package net.kgtkr.twitter_tools.domain.ports;
 
-import net.kgtkr.twitter_tools.domain.models.Raw
 import java.util.UUID
 
 trait UuidGenSYM[F[_]] {

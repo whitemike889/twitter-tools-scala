@@ -1,8 +1,6 @@
 package net.kgtkr.twitter_tools.domain.services;
 
-import cats.data._
 import net.kgtkr.twitter_tools.domain.models.UserRaw
-import cats.data.ReaderT
 import net.kgtkr.twitter_tools.domain.ports.DiscordHookSYM
 import net.kgtkr.twitter_tools.domain.models.DiscordPayload
 

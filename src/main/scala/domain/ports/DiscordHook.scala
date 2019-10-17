@@ -1,7 +1,6 @@
 package net.kgtkr.twitter_tools.domain.ports;
 
 import net.kgtkr.twitter_tools.domain.models.DiscordPayload
-import cats.data.ReaderT
 
 trait DiscordHookSYM[F[_]] {
   type Result[T] = F[T]

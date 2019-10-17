@@ -1,13 +1,11 @@
 package net.kgtkr.twitter_tools.domain.services;
 
-import cats.data.ReaderT
 import net.kgtkr.twitter_tools.domain.models.Token
 import net.kgtkr.twitter_tools.domain.models.FF
 import cats.Monad
 import net.kgtkr.twitter_tools.domain.ports.ClockSYM
 import net.kgtkr.twitter_tools.domain.ports.TwitterClientQuerySYM
 import net.kgtkr.twitter_tools.domain.ports.UuidGenSYM
-import scala.util.chaining._
 import cats.implicits._
 import net.kgtkr.twitter_tools.domain.models.FFId
 
