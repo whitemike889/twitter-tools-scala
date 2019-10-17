@@ -1,7 +1,8 @@
 package net.kgtkr.twitter_tools.domain.models
 import java.time.OffsetDateTime
+import java.util.UUID
 
-final case class FFId(value: String) extends AnyVal
+final case class FFId(value: UUID) extends AnyVal
 
 final case class FF(
     id: FFId,
