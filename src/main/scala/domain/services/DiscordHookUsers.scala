@@ -37,7 +37,7 @@ final class DiscordHookUsersImpl[F[_]: DiscordHookSYM]
 }
 
 object DiscordHookUsersImpl {
-  def userToEmbed(user: UserRaw): DiscordPayload.Embed = {
+  private def userToEmbed(user: UserRaw): DiscordPayload.Embed = {
     (for {
       userJson <- user.raw.asObject
       id <- userJson("id").flatMap(_.asNumber).flatMap(_.toLong)
