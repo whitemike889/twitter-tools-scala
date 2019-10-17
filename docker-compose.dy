@@ -15,7 +15,7 @@ function get_env() {
 function match_mode(env, map) {
   for (let key of Object.keys(map)) {
     if (key.split(",").includes(env.mode)) {
-      return map[key];
+      return map[key]();
     }
   }
   throw new Error();
@@ -33,25 +33,25 @@ const compose_services = env => ({
 
 const compose_services_app = env => ({
   build: match_mode(env, {
-    dev: {
+    dev: () => ({
       context: ".",
       dockerfile: "dev.Dockerfile"
-    },
-    prod: env.appImage ? undefined : ".",
-    test: {
+    }),
+    prod: () => (env.appImage ? undefined : "."),
+    test: () => ({
       context: ".",
       target: "builder"
-    }
+    })
   }),
   image: match_mode(env, {
-    prod: env.appImage || undefined,
-    [["dev", "test"]]: undefined
+    prod: () => env.appImage || undefined,
+    [["dev", "test"]]: () => undefined
   }),
   restart: "always",
   environment: {
     APP_DATA_DIR: match_mode(env, {
-      [["prod", "test"]]: "data",
-      dev: "data/app"
+      [["prod", "test"]]: () => "data",
+      dev: () => "data/app"
     }),
     CONFIG_DIR: "config",
     PSQL_HOST: "psql",
@@ -62,9 +62,9 @@ const compose_services_app = env => ({
   },
   depends_on: ["psql"],
   volumes: match_mode(env, {
-    prod: ["./data/app:/home/app/data", "./config:/home/app/config"],
-    dev: ["./:/home/app/"],
-    test: ["./config:/home/app/config"]
+    prod: () => ["./data/app:/home/app/data", "./config:/home/app/config"],
+    dev: () => ["./:/home/app/"],
+    test: () => ["./config:/home/app/config"]
   })
 });
 
