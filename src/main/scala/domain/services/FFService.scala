@@ -22,7 +22,7 @@ object FFServiceSYM {
 
 final class FFServiceImpl[F[_]: Monad: ClockSYM: TwitterClientQuerySYM: UuidGenSYM]
     extends FFServiceSYM[F] {
-  def create(token: Token): Result[FF] = {
+  override def create(token: Token): Result[FF] = {
     for {
       now <- ClockSYM[F].currentDate()
       userId <- TwitterClientQuerySYM[F].fetchAuthUserId(token)

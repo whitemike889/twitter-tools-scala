@@ -21,7 +21,7 @@ object FFMonitoringSYM {
 
 final class FFMonitoringImpl[F[_]: Monad: FFServiceSYM: FFRepositoryCmdSYM: FFRepositoryQuerySYM: TwitterClientQuerySYM: UserCacheSYM: DiscordHookUsersSYM]
     extends FFMonitoringSYM[F] {
-  def monitoring(account: FFMonitoringAccount): Result[Unit] = {
+  override def monitoring(account: FFMonitoringAccount): Result[Unit] = {
     val FFMonitoringAccount(token, hookUrl) = account
     for {
       ff <- FFServiceSYM[F].create(token)
