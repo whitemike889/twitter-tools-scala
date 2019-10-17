@@ -53,7 +53,7 @@ object DiscordHookUsersImpl {
       favouritesCount <- userJson("favourites_count")
         .flatMap(_.asNumber)
         .flatMap(_.toInt)
-      statusesCount <- userJson("favourites_count")
+      statusesCount <- userJson("statuses_count")
         .flatMap(_.asNumber)
         .flatMap(_.toInt)
       profileImageUrlHttps <- userJson("profile_image_url_https").flatMap(
