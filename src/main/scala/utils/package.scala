@@ -18,6 +18,9 @@ package object utils {
       .pipe(ReaderT(_))
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
+  def unreachable: Nothing = throw new Exception("unreachable")
+
   implicit class UtilReaderT[R, F[_], A](val fa: ReaderT[F, R, A])
       extends AnyVal {
     def runReaderT: Reader[R, F[A]] = utils.runReaderT(fa)
