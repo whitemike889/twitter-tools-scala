@@ -30,8 +30,8 @@ final class FFMonitoringImpl[F[_]: Monad: FFServiceSYM: FFRepositoryCmdSYM: FFRe
   def monitoring(account: FFMonitoringAccount): Result[Unit] = {
     val FFMonitoringAccount(token, hookUrl) = account
     for {
-      ff <- FFServiceSYM[F].create().run(token)
-      userId <- TwitterClientQuerySYM[F].fetchAuthUserId().run(token)
+      ff <- FFServiceSYM[F].create(token)
+      userId <- TwitterClientQuerySYM[F].fetchAuthUserId(token)
       oldFFs <- FFRepositoryQuerySYM[F].findUser(userId, 1)
       _ <- FFRepositoryCmdSYM[F].insert(ff)
       _ <- (oldFFs match {
@@ -46,10 +46,7 @@ final class FFMonitoringImpl[F[_]: Monad: FFServiceSYM: FFRepositoryCmdSYM: FFRe
           if (!requireUserIds.isEmpty) {
             for {
               userMap <- UserCacheSYM[F]
-                .lookupUsers(requireUserIds)
-                .toReader
-                .run(token)
-                .pipe(runId)
+                .lookupUsers(token, requireUserIds)
               _ <- DiscordHookUsersSYM[F]
                 .postUsers(
                   hookUrl,

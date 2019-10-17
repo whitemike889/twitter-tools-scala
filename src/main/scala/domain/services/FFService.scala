@@ -12,9 +12,9 @@ import cats.implicits._
 import net.kgtkr.twitter_tools.domain.models.FFId
 
 trait FFServiceSYM[F[_]] {
-  type Result[A] = ReaderT[F, Token, A]
+  type Result[A] = F[A]
 
-  def create(): Result[FF]
+  def create(token: Token): Result[FF]
 }
 
 object FFServiceSYM {
@@ -24,15 +24,17 @@ object FFServiceSYM {
 
 final class FFServiceImpl[F[_]: Monad: ClockSYM: TwitterClientQuerySYM: UuidGenSYM]
     extends FFServiceSYM[F] {
-  def create(): Result[FF] = {
+  def create(token: Token): Result[FF] = {
     for {
-      now <- ClockSYM[F].currentDate().pipe(ReaderT.liftF)
-      userId <- TwitterClientQuerySYM[F].fetchAuthUserId()
+      now <- ClockSYM[F].currentDate()
+      userId <- TwitterClientQuerySYM[F].fetchAuthUserId(token)
       followers <- TwitterClientQuerySYM[F]
-        .fetchFollowers(userId)
+        .fetchFollowers(token, userId)
         .map(_.toSet)
-      friends <- TwitterClientQuerySYM[F].fetchFriends(userId).map(_.toSet)
-      ffId <- UuidGenSYM[F].gen().pipe(ReaderT.liftF)
+      friends <- TwitterClientQuerySYM[F]
+        .fetchFriends(token, userId)
+        .map(_.toSet)
+      ffId <- UuidGenSYM[F].gen()
     } yield FF(
       id = FFId(ffId),
       userId = userId,
